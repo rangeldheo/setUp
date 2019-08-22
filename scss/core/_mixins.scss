@@ -1,0 +1,131 @@
+@mixin for-size($size) {
+    @if $size == phone-only {
+        @media (max-width: 599px) { @content; }
+    } @else if $size == phone {
+        @media (min-width: 300px) { @content; }
+    } @else if $size == phone-wide {
+        @media (min-width: 600px) { @content; }
+    } @else if $size == tablet{
+        @media (min-width: 760px) { @content; }
+    } @else if $size == tablet-landscape {
+        @media (min-width: 900px) { @content; }   
+    } @else if $size == crt{
+        @media (min-width: 1024px) { @content; }
+    } @else if $size == notebook {
+        @media (min-width: 1200px) { @content; }
+    } @else if $size == desktop {
+        @media (min-width: 1366px) { @content; }
+    } @else if $size == big-desktop {
+        @media (min-width: 1440px) { @content; }
+    }
+}
+
+/*
+    gerador de sombras
+*/
+
+@mixin shadowGenerator($top:0,$left:0,$blur:2px,$spread:1px,$color:rgba(0,0,0,0.25),$inset:false){
+    @if $inset {
+        -webkit-box-shadow: inset $top $left $blur $spread $color;
+        -moz-box-shadow: inset $top $left $blur $spread $color;
+        box-shadow: inset $top $left $blur $spread $color;
+    }@else{
+        -webkit-box-shadow: $top $left $blur $spread $color;
+        -moz-box-shadow: $top $left $blur $spread $color;
+        box-shadow: $top $left $blur $spread $color;
+    }
+}
+/*
+    para elementos dividios em Head, Main e Foot
+*/
+@mixin basic-grid{
+    @extend %flexbox;
+    @include align-items(center);
+    @include justify-content(space-between);
+    @include flex-wrap(wrap);
+}
+
+@mixin colGenerator($numCol:2,$margin:10px,$resposive:true){  
+    @if $resposive {  
+        @include for-size(notebook-md){
+            @include flexbox;
+            @include align-items;
+            @include justify-content(space-between);  
+        }
+        .col{        
+            @include for-size(phone){
+                width: 100%;
+            }             
+            @include for-size(notebook-md){
+                width: #{calc(#{(100% / $numCol)} - #{$margin})}
+            }          
+        }
+    }@else{
+        .col{
+            width: #{calc(#{(100% / $numCol)} - #{$margin})}
+        }
+    }
+}
+/*
+    Pseudo elementos
+*/
+@mixin pseudo($display: block, $pos: absolute, $content: ''){
+    content: $content;
+    display: $display;
+    position: $pos;
+}
+/* 
+    Porporção responsiva 16:9 
+*/
+@mixin responsive-ratio($x,$y, $pseudo: false) {
+    $padding: unquote( ( $y / $x ) * 100 + '%' );
+    @if $pseudo {
+        &:before {
+            @include pseudo($pos: relative);
+            width: 100%;
+            padding-top: $padding;
+        }
+    } @else {
+        padding-top: $padding;
+    }
+}
+/*
+    Placeholders
+*/
+@mixin input-placeholder {
+    &.placeholder { @content; }
+    &:-moz-placeholder { @content; }
+    &::-moz-placeholder { @content; }
+    &:-ms-input-placeholder { @content; }
+    &::-webkit-input-placeholder { @content; }
+}
+
+/*
+    Função para automatizar a compatibilidade de z-idexes
+*/
+
+$z-indexes: (
+"outdated-browser",
+"modal",
+"site-header",
+"page-wrapper",
+"site-footer"
+);
+
+@function z($name) {
+    @if index($z-indexes, $name) {
+        @return (length($z-indexes) - index($z-indexes, $name)) + 1;
+    } @else {
+        @warn 'There is no item "#{$name}" in this list; choose one of: #{$z-indexes}';
+        @return null;
+    }
+}
+/*
+    Truncar um elemento
+*/
+@mixin truncate($truncation-boundary) {
+    max-width: $truncation-boundary;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

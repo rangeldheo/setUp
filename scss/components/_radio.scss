@@ -1,0 +1,50 @@
+/*
+    Created on : 21/08/2019, 22:47:42
+    Author     : Dheo
+*/
+.fake-radio{  
+    input[type=radio]{
+        display: none
+    }
+    label{       
+        @extend %pointer;
+        &:before{
+            @include border-radius(50%);
+            border: 2px solid #aaaaaa;
+            display: block;
+            height: 20px;
+            width: 20px;
+            content: ' '
+        }
+    }
+    input[type=radio]:checked + label{       
+        &:before{
+            border: 2px solid #3187b5;
+            background: url(http://img.icons8.com/ios-glyphs/20/3187b5/ok.png) no-repeat center;
+        }
+    }
+}
+.fake-checkbox{    
+    input[type=checkbox]{
+        display: none
+    }
+    label{               
+        @extend %pointer;
+        &:before{
+            @extend %transition;
+            @include border-radius(15px);
+            background: url(http://img.icons8.com/ios-glyphs/20/cccccc/ok.png) no-repeat right center;
+            border: 2px solid #aaaaaa;
+            display: block;
+            height: 20px;
+            width: 50px;
+            content: ' '
+        }
+    }
+    input[type=checkbox]:checked + label{       
+        &:before{
+            border: 2px solid #3187b5;
+            background: url(http://img.icons8.com/ios-glyphs/20/3187b5/ok.png) no-repeat left center;
+        }
+    }
+}
